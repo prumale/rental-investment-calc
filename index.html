@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rental Investment Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 8px;
+      text-align: right;
+    }
+    th {
+      background-color: #f4f4f4;
+    }
+    input {
+      width: 80px;
+    }
+    @media print {
+      body {
+        transform: scale(0.95);
+        margin: 0;
+        padding: 0;
+      }
+      table {
+        font-size: 12px;
+      }
+      @page {
+        size: landscape;
+        margin: 1cm;
+      }
+      button, input, label, h1, div:not(#results):not(table) {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>Rental Investment Calculator</h1>
+
+  <div>
+    <label>Estimated Rent: $<input type="number" id="rent" value="2400"></label>
+    <label>Starting Offer Price: $<input type="number" id="startOffer" value="300000"></label>
+    <label>Landlord Insurance: $<input type="number" id="insurance" value="1300"></label>
+    <label>Water + Sewer: $<input type="number" id="utilities" value="800"></label>
+    <label>Additional Expenses: $<input type="number" id="additional" value="4000"></label><br><br>
+    <label>Property Taxes: $<input type="number" id="taxes" value="6500"></label>
+    <label>Down Payment %: <input type="number" id="downPaymentPercent" value="20"></label>
+    <label>Closing Cost %: <input type="number" id="closingCostPercent" value="3"></label>
+    <label>Interest Rate %: <input type="number" id="interestRate" value="6.875"></label>
+    <label>Loan Term (years): <input type="number" id="loanTerm" value="30"></label>
+    <button onclick="calculate()">Calculate</button>
+    <button onclick="window.print()">Print</button>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Offer Price</th>
+        <th>Down Payment</th>
+        <th>Closing Costs</th>
+        <th>Additional Expenses</th>
+        <th>Initial Investment</th>
+        <th>Monthly Mortgage</th>
+        <th>Annual Costs</th>
+        <th>Annual Income</th>
+        <th>Cash Flow</th>
+        <th>ROI %</th>
+      </tr>
+    </thead>
+    <tbody id="results"></tbody>
+  </table>
+
+  <script>
+    function calculate() {
+      const rent = parseFloat(document.getElementById('rent').value) * 12;
+      const downPct = parseFloat(document.getElementById('downPaymentPercent').value) / 100;
+      const closingPct = parseFloat(document.getElementById('closingCostPercent').value) / 100;
+      const interestRate = parseFloat(document.getElementById('interestRate').value) / 100 / 12;
+      const termMonths = parseFloat(document.getElementById('loanTerm').value) * 12;
+      const insurance = parseFloat(document.getElementById('insurance').value);
+      const utilities = parseFloat(document.getElementById('utilities').value);
+      const additional = parseFloat(document.getElementById('additional').value);
+      const taxes = parseFloat(document.getElementById('taxes').value);
+      const startOffer = parseFloat(document.getElementById('startOffer').value);
+
+      const scenarios = Array.from({ length: 7 }, (_, i) => startOffer + i * 5000);
+
+      let html = '';
+
+      scenarios.forEach(price => {
+        const downPayment = price * downPct;
+        const closingCosts = price * closingPct;
+        const loanAmount = price - downPayment;
+        const monthlyMortgage = loanAmount * (interestRate * Math.pow(1 + interestRate, termMonths)) / (Math.pow(1 + interestRate, termMonths) - 1);
+        const annualMortgage = monthlyMortgage * 12;
+        const annualCosts = annualMortgage + taxes + insurance + utilities;
+        const totalInitialInvestment = downPayment + closingCosts + additional;
+        const cashFlow = rent - annualCosts;
+        const roi = (cashFlow / totalInitialInvestment) * 100;
+
+        html += `
+          <tr>
+            <td>$${price.toLocaleString()}</td>
+            <td>$${downPayment.toFixed(0)}</td>
+            <td>$${closingCosts.toFixed(0)}</td>
+            <td>$${additional.toFixed(0)}</td>
+            <td>$${totalInitialInvestment.toFixed(0)}</td>
+            <td>$${monthlyMortgage.toFixed(0)}</td>
+            <td>$${annualCosts.toFixed(0)}</td>
+            <td>$${rent.toFixed(0)}</td>
+            <td>$${cashFlow.toFixed(0)}</td>
+            <td>${roi.toFixed(2)}%</td>
+          </tr>
+        `;
+      });
+
+      document.getElementById('results').innerHTML = html;
+    }
+
+    calculate();
+  </script>
+</body>
+</html>
