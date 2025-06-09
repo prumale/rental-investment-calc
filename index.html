@@ -70,15 +70,15 @@
   <h1>Rental Investment Calculator</h1>
 
   <div class="inputs" oninput="calculate()">
-    <label>Estimated Rent: $<input type="number" id="rent" value="2400"></label>
-    <label>Starting Offer Price: $<input type="number" id="startOffer" value="310000"></label>
-    <label>Landlord Insurance: $<input type="number" id="insurance" value="1300"></label>
+    <label>Estimated Rent: $<input type="number" id="rent" value="1500"></label>
+    <label>Starting Offer Price: $<input type="number" id="startOffer" value="430000"></label>
+    <label>Landlord Insurance: $<input type="number" id="insurance" value="1500"></label>
     <label>Water + Sewer: $<input type="number" id="utilities" value="800"></label>
-    <label>Additional Expenses: $<input type="number" id="additional" value="4000"></label>
-    <label>Property Taxes: $<input type="number" id="taxes" value="4650"></label>
-    <label>Down Payment %: <input type="number" id="downPaymentPercent" value="20"></label>
+    <label>Additional Expenses: $<input type="number" id="additional" value="20000"></label>
+    <label>Property Taxes: $<input type="number" id="taxes" value="6000"></label>
+    <label>Down Payment %: <input type="number" id="downPaymentPercent" value="10"></label>
     <label>Closing Cost %: <input type="number" id="closingCostPercent" value="3"></label>
-    <label>Interest Rate %: <input type="number" id="interestRate" value="6.875"></label>
+    <label>Interest Rate %: <input type="number" id="interestRate" value="6.75"></label>
     <label>Loan Term (years): <input type="number" id="loanTerm" value="30"></label>
   </div>
 
@@ -99,7 +99,7 @@
       const taxes = parseFloat(document.getElementById('taxes').value) || 0;
       const startOffer = parseFloat(document.getElementById('startOffer').value) || 0;
 
-      const scenarios = Array.from({ length: 3 }, (_, i) => startOffer + i * 5000);
+      const scenarios = Array.from({ length: 3 }, (_, i) => startOffer + i * 10000);
 
       const labels = [
         'Offer Price',
