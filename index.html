@@ -108,7 +108,7 @@
         'Additional Expenses',
         'Initial Investment',
         'Monthly Mortgage',
-        'Annual Costs',
+        'Monthly Costs',
         'Annual Income',
         'Cash Flow',
         'ROI %'
@@ -122,7 +122,7 @@
           ? loanAmount * (interestRate * Math.pow(1 + interestRate, termMonths)) / (Math.pow(1 + interestRate, termMonths) - 1)
           : loanAmount / termMonths;
         const annualMortgage = monthlyMortgage * 12;
-        const annualCosts = annualMortgage + taxes + insurance + utilities;
+        const annualCosts = (annualMortgage + taxes + insurance + utilities)/12;
         const totalInitialInvestment = downPayment + closingCosts + additional;
         const cashFlow = rent - annualCosts;
         const roi = totalInitialInvestment > 0 ? (cashFlow / totalInitialInvestment) * 100 : 0;
