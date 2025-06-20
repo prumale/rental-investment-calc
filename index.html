@@ -71,14 +71,14 @@
 
   <div class="inputs" oninput="calculate()">
     <label>Estimated Rent: $<input type="number" id="rent" value="1500"></label>
-    <label>Starting Offer Price: $<input type="number" id="startOffer" value="430000"></label>
+    <label>Starting Offer Price: $<input type="number" id="startOffer" value="530000"></label>
     <label>Landlord Insurance: $<input type="number" id="insurance" value="1500"></label>
     <label>Water + Sewer: $<input type="number" id="utilities" value="800"></label>
-    <label>Additional Expenses: $<input type="number" id="additional" value="20000"></label>
-    <label>Property Taxes: $<input type="number" id="taxes" value="6000"></label>
+    <label>Additional Expenses: $<input type="number" id="additional" value="15000"></label>
+    <label>Property Taxes: $<input type="number" id="taxes" value="9000"></label>
     <label>Down Payment %: <input type="number" id="downPaymentPercent" value="10"></label>
     <label>Closing Cost %: <input type="number" id="closingCostPercent" value="3"></label>
-    <label>Interest Rate %: <input type="number" id="interestRate" value="6.75"></label>
+    <label>Interest Rate %: <input type="number" id="interestRate" value="5.875"></label>
     <label>Loan Term (years): <input type="number" id="loanTerm" value="30"></label>
   </div>
 
@@ -88,7 +88,7 @@
 
   <script>
     function calculate() {
-      const rent = (parseFloat(document.getElementById('rent').value) || 0) * 12;
+      const rent = (parseFloat(document.getElementById('rent').value) || 0);
       const downPct = (parseFloat(document.getElementById('downPaymentPercent').value) || 0) / 100;
       const closingPct = (parseFloat(document.getElementById('closingCostPercent').value) || 0) / 100;
       const interestRate = (parseFloat(document.getElementById('interestRate').value) || 0) / 100 / 12;
@@ -122,10 +122,10 @@
           ? loanAmount * (interestRate * Math.pow(1 + interestRate, termMonths)) / (Math.pow(1 + interestRate, termMonths) - 1)
           : loanAmount / termMonths;
         const annualMortgage = monthlyMortgage * 12;
-        const annualCosts = (annualMortgage + taxes + insurance + utilities)/12;
+        const monthlyCosts = (annualMortgage + taxes + insurance + utilities)/12;
         const totalInitialInvestment = downPayment + closingCosts + additional;
-        const cashFlow = rent - annualCosts;
-        const roi = totalInitialInvestment > 0 ? (cashFlow / totalInitialInvestment) * 100 : 0;
+        const cashFlow = (rent - monthlyCosts);
+        const roi = totalInitialInvestment > 0 ? ((cashFlow * 12) / totalInitialInvestment) * 100 : 0;
 
         return [
           `$${price.toLocaleString()}`,
@@ -134,7 +134,7 @@
           `$${additional.toFixed(0)}`,
           `$${totalInitialInvestment.toFixed(0)}`,
           `$${monthlyMortgage.toFixed(0)}`,
-          `$${annualCosts.toFixed(0)}`,
+          `$${monthlyCosts.toFixed(0)}`,
           `$${rent.toFixed(0)}`,
           `$${cashFlow.toFixed(0)}`,
           `${roi.toFixed(2)}%`
